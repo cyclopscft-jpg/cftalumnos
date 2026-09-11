@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CFT Alumno</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+    <div class="app">
+
+        <!-- LOGIN -->
+        <section id="pantallaLogin" class="pantalla login-screen">
+
+            <div class="login-box">
+
+                <img src="logocft.jpeg" class="login-logo" alt="CFT">
+
+                <h1>CFT ALUMNO</h1>
+                <p>Ingresa a tu cuenta</p>
+
+                <input
+                    type="text"
+                    id="codigoLogin"
+                    placeholder="Código de alumno"
+                    autocomplete="username"
+                >
+
+                <input
+                    type="password"
+                    id="passwordLogin"
+                    placeholder="Contraseña"
+                    autocomplete="current-password"
+                >
+
+                <button onclick="iniciarSesion()" class="btn-principal">
+                    INGRESAR
+                </button>
+
+                <p id="mensajeLogin" class="mensaje-login"></p>
+
+            </div>
+
+        </section>
+
+
+        <!-- CAMBIO OBLIGATORIO DE CONTRASEÑA -->
+        <section id="pantallaCambioPassword" class="pantalla login-screen" style="display:none;">
+
+            <div class="login-box cambio-password-box">
+
+                <img src="logocft.jpeg" class="login-logo" alt="CFT">
+
+                <h1>NUEVA CONTRASEÑA</h1>
+
+                <p class="cambio-password-text">
+                    Por seguridad, debes crear una nueva contraseña para continuar.
+                </p>
+
+                <input
+                    type="password"
+                    id="nuevaPassword"
+                    placeholder="Nueva contraseña"
+                    autocomplete="new-password"
+                >
+
+                <input
+                    type="password"
+                    id="confirmarPassword"
+                    placeholder="Confirmar nueva contraseña"
+                    autocomplete="new-password"
+                >
+
+                <button
+                    onclick="guardarNuevaPassword()"
+                    class="btn-principal"
+                >
+                    GUARDAR CONTRASEÑA
+                </button>
+
+                <p id="mensajeCambioPassword" class="mensaje-login"></p>
+
+            </div>
+
+        </section>
+
+
+        <!-- APLICACIÓN -->
+        <section id="pantallaApp" class="pantalla" style="display:none;">
+
+            <!-- HEADER -->
+            <header class="header">
+
+                <div class="header-logo">
+                    <img src="logocft.jpeg" alt="CFT">
+                </div>
+
+                <div class="header-info">
+                    <strong id="nombreHeader">Alumno</strong>
+                    <span>CFT Alumno</span>
+                </div>
+
+                <button onclick="cerrarSesion()" class="btn-salir">
+                    Salir
+                </button>
+
+            </header>
+
+
+            <!-- INICIO -->
+            <main id="pantallaInicio" class="contenido">
+
+                <div class="hero">
+
+                    <div>
+                        <span class="hero-small">BIENVENIDO</span>
+
+                        <h2>
+                            Hola,
+                            <span id="nombreAlumno">Alumno</span> 👊
+                        </h2>
+
+                        <p>
+                            Revisa tu membresía y asistencia.
+                        </p>
+                    </div>
+
+                    <button
+                        onclick="marcarAsistencia()"
+                        class="btn-asistencia"
+                    >
+                        ✓ MARCAR ASISTENCIA
+                    </button>
+
+                </div>
+
+
+                <!-- ESTADO DE MEMBRESÍA -->
+                <section class="panel">
+
+                    <div class="panel-title">
+                        <h3>Mi membresía</h3>
+                    </div>
+
+                    <div class="membresia-card">
+
+                        <div>
+                            <span class="label">ESTADO</span>
+                            <strong id="estadoMembresia">
+                                Cargando...
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span class="label">VENCIMIENTO</span>
+                            <strong id="fechaVencimiento">
+                                —
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span class="label">PLAN</span>
+                            <strong id="planAlumno">
+                                —
+                            </strong>
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- ACCIONES -->
+                <section class="acciones-grid">
+
+                    <button
+                        class="accion-card"
+                        onclick="mostrarAsistencia()"
+                    >
+                        <span class="accion-icon">✓</span>
+                        <strong>Mi asistencia</strong>
+                        <small>Ver mis registros</small>
+                    </button>
+
+                    <button
+                        class="accion-card"
+                        onclick="mostrarRenovacion()"
+                    >
+                        <span class="accion-icon">↻</span>
+                        <strong>Renovar membresía</strong>
+                        <small>Elige tu plan</small>
+                    </button>
+
+                    <button
+                        class="accion-card"
+                        onclick="mostrarPerfil()"
+                    >
+                        <span class="accion-icon">👤</span>
+                        <strong>Mi perfil</strong>
+                        <small>Ver mis datos</small>
+                    </button>
+
+                </section>
+
+
+                <!-- RESUMEN ASISTENCIA -->
+                <section class="panel">
+
+                    <div class="panel-title">
+                        <h3>Mi asistencia</h3>
+                    </div>
+
+                    <div class="estadisticas">
+
+                        <div class="stat">
+                            <strong id="asistenciasMes">
+                                0
+                            </strong>
+                            <span>Este mes</span>
+                        </div>
+
+                        <div class="stat">
+                            <strong id="ultimaAsistencia">
+                                —
+                            </strong>
+                            <span>Última asistencia</span>
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </main>
+
+
+            <!-- ASISTENCIA -->
+            <main
+                id="pantallaAsistenciaAlumno"
+                class="contenido"
+                style="display:none;"
+            >
+
+                <div class="titulo-pantalla">
+                    <button onclick="volverInicio()">←</button>
+
+                    <div>
+                        <h2>Mi asistencia</h2>
+                        <p>Historial de asistencias</p>
+                    </div>
+                </div>
+
+                <section class="panel">
+
+                    <div id="listaAsistencias">
+                        Cargando...
+                    </div>
+
+                </section>
+
+            </main>
+
+
+            <!-- RENOVACIÓN -->
+            <main
+                id="pantallaRenovacion"
+                class="contenido"
+                style="display:none;"
+            >
+
+                <div class="titulo-pantalla">
+
+                    <button onclick="volverInicio()">←</button>
+
+                    <div>
+                        <h2>Renovar membresía</h2>
+                        <p>Elige tu plan</p>
+                    </div>
+
+                </div>
+
+
+                <section class="planes-grid">
+
+                    <button
+                        class="plan-card"
+                        onclick="seleccionarPlan(1,130)"
+                    >
+                        <span>1 MES</span>
+                        <strong>S/ 130</strong>
+                    </button>
+
+                    <button
+                        class="plan-card"
+                        onclick="seleccionarPlan(2,220)"
+                    >
+                        <span>2 MESES</span>
+                        <strong>S/ 220</strong>
+                    </button>
+
+                    <button
+                        class="plan-card"
+                        onclick="seleccionarPlan(3,300)"
+                    >
+                        <span>3 MESES</span>
+                        <strong>S/ 300</strong>
+                    </button>
+
+                </section>
+
+
+                <section
+                    id="panelYape"
+                    class="panel yape-panel"
+                    style="display:none;"
+                >
+
+                    <h3>Pago por Yape</h3>
+
+                    <p>
+                        Realiza el pago del plan seleccionado
+                        y envía tu comprobante.
+                    </p>
+
+                    <div class="yape-box">
+                        <strong id="montoYape">
+                            S/ 0
+                        </strong>
+
+                        <span>
+                            Yape
+                        </span>
+                    </div>
+
+                    <button
+                        onclick="enviarComprobante()"
+                        class="btn-principal"
+                    >
+                        ENVIÉ MI COMPROBANTE
+                    </button>
+
+                    <p class="nota-pago">
+                        Tu renovación quedará pendiente de
+                        verificación.
+                    </p>
+
+                </section>
+
+            </main>
+
+
+            <!-- PERFIL -->
+            <main
+                id="pantallaPerfil"
+                class="contenido"
+                style="display:none;"
+            >
+
+                <div class="titulo-pantalla">
+
+                    <button onclick="volverInicio()">←</button>
+
+                    <div>
+                        <h2>Mi perfil</h2>
+                        <p>Información de mi cuenta</p>
+                    </div>
+
+                </div>
+
+
+                <section class="panel perfil-lista">
+
+                    <div>
+                        <span>Nombre</span>
+                        <strong id="perfilNombre">—</strong>
+                    </div>
+
+                    <div>
+                        <span>DNI</span>
+                        <strong id="perfilDni">—</strong>
+                    </div>
+
+                    <div>
+                        <span>Celular</span>
+                        <strong id="perfilCelular">—</strong>
+                    </div>
+
+                    <div>
+                        <span>Correo</span>
+                        <strong id="perfilCorreo">—</strong>
+                    </div>
+
+                    <div>
+                        <span>Horario</span>
+                        <strong id="perfilHorario">—</strong>
+                    </div>
+
+                    <div>
+                        <span>Plan</span>
+                        <strong id="perfilPlan">—</strong>
+                    </div>
+
+                </section>
+
+            </main>
+
+
+            <!-- NAVEGACIÓN -->
+            <nav class="bottom-nav">
+
+                <button
+                    class="nav-item activo"
+                    onclick="volverInicio()"
+                >
+                    <span>⌂</span>
+                    <small>Inicio</small>
+                </button>
+
+                <button
+                    class="nav-item"
+                    onclick="mostrarAsistencia()"
+                >
+                    <span>✓</span>
+                    <small>Asistencia</small>
+                </button>
+
+                <button
+                    class="nav-item"
+                    onclick="mostrarRenovacion()"
+                >
+                    <span>↻</span>
+                    <small>Renovar</small>
+                </button>
+
+                <button
+                    class="nav-item"
+                    onclick="mostrarPerfil()"
+                >
+                    <span>👤</span>
+                    <small>Perfil</small>
+                </button>
+
+            </nav>
+
+        </section>
+
+    </div>
+
+
+    <!-- JavaScript -->
+    <script src="app.js"></script>
+
+</body>
+</html>

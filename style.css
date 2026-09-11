@@ -1,0 +1,1504 @@
+/* =========================================================
+   CFT ALUMNO — STYLE.CSS
+   DISEÑO MODERNO CFT
+   ========================================================= */
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    width: 100%;
+    min-height: 100%;
+    background: #050505;
+}
+
+body {
+    width: 100%;
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 50% -10%,
+            rgba(255, 106, 0, .12),
+            transparent 35%
+        ),
+        #050505 !important;
+
+    color: #ffffff;
+
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif !important;
+
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+button,
+input {
+    font-family: inherit;
+}
+
+button {
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+input {
+    outline: none;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+
+/* =========================================================
+   VARIABLES
+   ========================================================= */
+
+:root {
+    --negro: #070707;
+    --negro2: #0d0d0d;
+    --gris: #151515;
+    --gris2: #202020;
+
+    --borde: rgba(255, 255, 255, .08);
+
+    --grisTexto: #8d8d8d;
+
+    --blanco: #ffffff;
+
+    --naranja: #ff6a00;
+    --naranja2: #ff7a1a;
+
+    --verde: #20c878;
+    --rojo: #ff4040;
+
+    --radio: 18px;
+}
+
+
+/* =========================================================
+   APP
+   ========================================================= */
+
+.app {
+    position: relative;
+
+    width: 100%;
+    max-width: 480px;
+
+    min-height: 100vh;
+    min-height: 100dvh;
+
+    margin: 0 auto;
+
+    background: #080808 !important;
+
+    box-shadow:
+        0 0 80px rgba(0, 0, 0, .65) !important;
+
+    overflow-x: hidden;
+}
+
+
+/* =========================================================
+   PANTALLAS
+   ========================================================= */
+
+.pantalla {
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
+
+/* =========================================================
+   LOGIN
+   ========================================================= */
+
+.login-screen {
+    min-height: 100vh;
+    min-height: 100dvh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+
+    background:
+        radial-gradient(
+            circle at 50% 15%,
+            rgba(255, 106, 0, .13),
+            transparent 34%
+        ),
+        #070707;
+}
+
+.login-box {
+    width: 100%;
+    max-width: 360px;
+
+    padding: 34px 24px 28px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, .045),
+            rgba(255, 255, 255, .018)
+        );
+
+    border: 1px solid rgba(255, 255, 255, .08);
+
+    border-radius: 24px;
+
+    box-shadow:
+        0 25px 70px rgba(0, 0, 0, .55),
+        inset 0 1px 0 rgba(255, 255, 255, .025);
+
+    text-align: center;
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+.login-logo {
+    width: 82px;
+    height: 82px;
+
+    object-fit: contain;
+
+    margin: 0 auto 20px;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 0 30px rgba(255, 106, 0, .14);
+}
+
+.login-box h1 {
+    margin-bottom: 8px;
+
+    color: #ffffff;
+
+    font-size: 23px;
+    font-weight: 900;
+
+    letter-spacing: -.5px;
+}
+
+.login-box > p:not(.mensaje-login):not(.cambio-password-text) {
+    margin-bottom: 24px;
+
+    color: #777;
+
+    font-size: 13px;
+}
+
+.login-box input {
+    width: 100%;
+    height: 50px;
+
+    margin-bottom: 12px;
+    padding: 0 15px;
+
+    background: #111111;
+
+    border: 1px solid #292929;
+
+    border-radius: 13px;
+
+    color: #ffffff;
+
+    font-size: 14px;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease,
+        background .2s ease;
+}
+
+.login-box input::placeholder {
+    color: #666;
+}
+
+.login-box input:focus {
+    background: #131313;
+
+    border-color: rgba(255, 106, 0, .75);
+
+    box-shadow:
+        0 0 0 3px rgba(255, 106, 0, .08);
+}
+
+.btn-principal {
+    width: 100%;
+    min-height: 50px;
+
+    margin-top: 6px;
+
+    padding: 13px 18px;
+
+    border: 1px solid var(--naranja);
+
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff6a00,
+            #ff7a1a
+        );
+
+    color: #ffffff;
+
+    font-size: 13px;
+    font-weight: 900;
+
+    letter-spacing: .3px;
+
+    box-shadow:
+        0 8px 24px rgba(255, 106, 0, .18);
+
+    transition:
+        transform .15s ease,
+        box-shadow .2s ease,
+        filter .2s ease;
+}
+
+.btn-principal:active {
+    transform: scale(.97);
+}
+
+.btn-principal:hover {
+    filter: brightness(1.06);
+
+    box-shadow:
+        0 10px 30px rgba(255, 106, 0, .25);
+}
+
+.mensaje-login {
+    min-height: 18px;
+
+    margin-top: 14px;
+
+    color: #ff6a00;
+
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.cambio-password-box {
+    padding-top: 30px;
+}
+
+.cambio-password-text {
+    margin: 0 0 22px;
+
+    color: #888;
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   CAMBIO OBLIGATORIO DE CONTRASEÑA
+   IMPORTANTE:
+   display:none NO lleva !important.
+   app.js utiliza display:flex.
+   ========================================================= */
+
+#pantallaCambioPassword {
+    position: fixed !important;
+
+    inset: 0 !important;
+
+    width: 100vw !important;
+    height: 100vh !important;
+    min-height: 100vh !important;
+
+    background: #070707 !important;
+
+    display: none;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    z-index: 99999 !important;
+
+    padding: 20px !important;
+
+    box-sizing: border-box !important;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    display: flex;
+    align-items: center;
+
+    height: 72px;
+
+    padding: 0 18px;
+
+    background: rgba(10, 10, 10, .92) !important;
+
+    backdrop-filter: blur(18px) !important;
+    -webkit-backdrop-filter: blur(18px) !important;
+
+    border-bottom: 1px solid var(--borde) !important;
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+}
+
+.header-logo img {
+    width: 42px !important;
+    height: 42px !important;
+
+    object-fit: contain !important;
+
+    border-radius: 11px !important;
+}
+
+.header-info {
+    flex: 1 !important;
+
+    margin-left: 12px !important;
+
+    min-width: 0;
+}
+
+.header-info strong {
+    display: block !important;
+
+    overflow: hidden;
+
+    color: #ffffff;
+
+    font-size: 15px !important;
+    font-weight: 800 !important;
+
+    letter-spacing: -.2px !important;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.header-info span {
+    display: block !important;
+
+    margin-top: 2px !important;
+
+    color: #777 !important;
+
+    font-size: 10px !important;
+
+    text-transform: uppercase !important;
+
+    letter-spacing: .8px !important;
+}
+
+.btn-salir {
+    flex-shrink: 0;
+
+    padding: 8px 12px !important;
+
+    border: 1px solid #292929 !important;
+
+    border-radius: 10px !important;
+
+    background: #151515 !important;
+
+    color: #aaa !important;
+
+    font-size: 11px !important;
+    font-weight: 700 !important;
+
+    transition:
+        background .2s ease,
+        color .2s ease,
+        border-color .2s ease,
+        transform .15s ease;
+}
+
+.btn-salir:active {
+    transform: scale(.96);
+}
+
+.btn-salir:hover {
+    background: #1d1d1d !important;
+
+    border-color: #3a3a3a !important;
+
+    color: #ffffff !important;
+}
+
+
+/* =========================================================
+   CONTENIDO
+   ========================================================= */
+
+.contenido {
+    width: 100%;
+
+    padding: 20px 16px 105px;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.hero {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 16px;
+
+    min-height: 178px;
+
+    padding: 24px 20px;
+
+    margin-bottom: 18px;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            #151515 0%,
+            #0c0c0c 58%,
+            #090909 100%
+        );
+
+    border: 1px solid rgba(255, 255, 255, .07);
+
+    border-radius: 21px;
+
+    box-shadow:
+        0 18px 45px rgba(0, 0, 0, .35);
+}
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+
+    width: 190px;
+    height: 190px;
+
+    top: -100px;
+    right: -65px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255, 106, 0, .20),
+            transparent 68%
+        );
+
+    pointer-events: none;
+}
+
+.hero::after {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    bottom: 0;
+
+    width: 42%;
+    height: 2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--naranja),
+            transparent
+        );
+
+    opacity: .85;
+}
+
+.hero > div {
+    position: relative;
+    z-index: 2;
+
+    flex: 1;
+
+    min-width: 0;
+}
+
+.hero-small {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: var(--naranja);
+
+    font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: 1.7px;
+}
+
+.hero h2 {
+    position: relative;
+    z-index: 2;
+
+    margin-bottom: 8px;
+
+    color: #ffffff;
+
+    font-size: 25px;
+    font-weight: 900;
+
+    line-height: 1.1;
+
+    letter-spacing: -.7px;
+}
+
+.hero h2 span {
+    color: var(--naranja);
+}
+
+.hero p {
+    position: relative;
+    z-index: 2;
+
+    color: #7f7f7f;
+
+    font-size: 12px;
+
+    line-height: 1.45;
+}
+
+.btn-asistencia {
+    position: relative;
+    z-index: 3;
+
+    flex-shrink: 0;
+
+    min-height: 46px;
+
+    padding: 0 14px;
+
+    border: 1px solid var(--naranja);
+
+    border-radius: 12px;
+
+    background: #111111;
+
+    color: #ffffff;
+
+    font-size: 10px;
+    font-weight: 900;
+
+    letter-spacing: .3px;
+
+    box-shadow:
+        0 0 0 1px rgba(255, 106, 0, .08),
+        0 8px 24px rgba(0, 0, 0, .25);
+
+    transition:
+        transform .15s ease,
+        background .2s ease,
+        box-shadow .2s ease;
+}
+
+.btn-asistencia:active {
+    transform: scale(.97);
+}
+
+.btn-asistencia:hover {
+    background: #171717;
+
+    box-shadow:
+        0 8px 26px rgba(255, 106, 0, .13);
+}
+
+
+/* =========================================================
+   PANELES
+   ========================================================= */
+
+.panel {
+    width: 100%;
+
+    margin-top: 18px;
+
+    padding: 17px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, .035),
+            rgba(255, 255, 255, .015)
+        );
+
+    border: 1px solid var(--borde);
+
+    border-radius: var(--radio);
+
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, .22);
+}
+
+.panel-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 14px;
+}
+
+.panel-title h3 {
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    letter-spacing: -.2px;
+}
+
+
+/* =========================================================
+   MEMBRESÍA
+   ========================================================= */
+
+.membresia-card {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 10px;
+}
+
+.membresia-card > div {
+    min-height: 73px;
+
+    padding: 13px;
+
+    background: #101010;
+
+    border: 1px solid rgba(255, 255, 255, .055);
+
+    border-radius: 13px;
+}
+
+.membresia-card > div:first-child {
+    grid-column: 1 / -1;
+
+    min-height: 80px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 106, 0, .08),
+            #101010
+        );
+
+    border-color: rgba(255, 106, 0, .15);
+}
+
+.label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #666;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+.membresia-card strong {
+    display: block;
+
+    color: #ffffff;
+
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.membresia-card > div:first-child strong {
+    color: var(--naranja);
+
+    font-size: 17px;
+}
+
+
+/* ESTADOS DE MEMBRESÍA */
+
+.estado-activo {
+    color: var(--verde) !important;
+}
+
+.estado-por-vencer {
+    color: var(--naranja) !important;
+}
+
+.estado-vencido {
+    color: var(--rojo) !important;
+}
+
+.estado-sin-fecha {
+    color: #888888 !important;
+}
+
+
+/* =========================================================
+   ACCIONES
+   ========================================================= */
+
+.acciones-grid {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 10px;
+
+    margin-top: 18px;
+}
+
+.accion-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    min-width: 0;
+
+    padding: 15px 12px;
+
+    background: #101010;
+
+    border: 1px solid rgba(255, 255, 255, .07);
+
+    border-radius: 15px;
+
+    color: #ffffff;
+
+    text-align: left;
+
+    transition:
+        transform .15s ease,
+        border-color .2s ease,
+        background .2s ease,
+        box-shadow .2s ease;
+}
+
+.accion-card:hover {
+    background: #141414;
+
+    border-color: rgba(255, 106, 0, .25);
+
+    box-shadow:
+        0 8px 22px rgba(0, 0, 0, .22);
+}
+
+.accion-card:active {
+    transform: scale(.97);
+}
+
+.accion-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 32px;
+    height: 32px;
+
+    margin-bottom: 11px;
+
+    background: rgba(255, 106, 0, .10);
+
+    border: 1px solid rgba(255, 106, 0, .16);
+
+    border-radius: 10px;
+
+    color: var(--naranja);
+
+    font-size: 15px;
+}
+
+.accion-card strong {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #ffffff;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    line-height: 1.25;
+}
+
+.accion-card small {
+    display: block;
+
+    color: #666;
+
+    font-size: 9px;
+
+    line-height: 1.3;
+}
+
+
+/* =========================================================
+   ESTADÍSTICAS
+   ========================================================= */
+
+.estadisticas {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 10px;
+}
+
+.stat {
+    min-height: 86px;
+
+    padding: 15px;
+
+    background: #101010;
+
+    border: 1px solid rgba(255, 255, 255, .055);
+
+    border-radius: 13px;
+}
+
+.stat strong {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #ffffff;
+
+    font-size: 22px;
+    font-weight: 900;
+
+    letter-spacing: -.5px;
+}
+
+.stat span {
+    display: block;
+
+    color: #666;
+
+    font-size: 10px;
+
+    line-height: 1.3;
+}
+
+
+/* =========================================================
+   TÍTULOS DE PANTALLA
+   ========================================================= */
+
+.titulo-pantalla {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 20px;
+}
+
+.titulo-pantalla > button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    width: 40px;
+    height: 40px;
+
+    border: 1px solid #252525;
+
+    border-radius: 12px;
+
+    background: #111111;
+
+    color: #ffffff;
+
+    font-size: 19px;
+
+    transition:
+        transform .15s ease,
+        background .2s ease,
+        border-color .2s ease;
+}
+
+.titulo-pantalla > button:active {
+    transform: scale(.94);
+}
+
+.titulo-pantalla > button:hover {
+    background: #171717;
+
+    border-color: #333333;
+}
+
+.titulo-pantalla h2 {
+    margin-bottom: 3px;
+
+    color: #ffffff;
+
+    font-size: 21px;
+    font-weight: 900;
+
+    letter-spacing: -.5px;
+}
+
+.titulo-pantalla p {
+    color: #6f6f6f;
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   ASISTENCIA
+   ========================================================= */
+
+#listaAsistencias {
+    width: 100%;
+}
+
+.asistencia-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    padding: 13px 0;
+
+    border-bottom: 1px solid rgba(255, 255, 255, .055);
+}
+
+.asistencia-item:last-child {
+    border-bottom: none;
+}
+
+.asistencia-item > div {
+    min-width: 0;
+}
+
+.asistencia-item strong {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #ffffff;
+
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.asistencia-item span {
+    color: #666;
+
+    font-size: 10px;
+}
+
+.asistencia-item .estado {
+    flex-shrink: 0;
+
+    padding: 5px 8px;
+
+    border-radius: 8px;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+}
+
+.asistencia-item .presente {
+    background: rgba(32, 200, 120, .10);
+
+    color: var(--verde);
+}
+
+.asistencia-item .falta {
+    background: rgba(255, 64, 64, .10);
+
+    color: var(--rojo);
+}
+
+
+/* =========================================================
+   PLANES
+   ========================================================= */
+
+.planes-grid {
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    gap: 11px;
+}
+
+.plan-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+
+    min-height: 72px;
+
+    padding: 16px 17px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #151515,
+            #101010
+        );
+
+    border: 1px solid rgba(255, 255, 255, .07);
+
+    border-radius: 15px;
+
+    color: #ffffff;
+
+    text-align: left;
+
+    transition:
+        transform .15s ease,
+        border-color .2s ease,
+        background .2s ease,
+        box-shadow .2s ease;
+}
+
+.plan-card:hover {
+    border-color: rgba(255, 106, 0, .35);
+
+    background:
+        linear-gradient(
+            145deg,
+            #191919,
+            #111111
+        );
+
+    box-shadow:
+        0 10px 28px rgba(0, 0, 0, .25);
+}
+
+.plan-card:active {
+    transform: scale(.98);
+}
+
+.plan-card span {
+    color: #ffffff;
+
+    font-size: 12px;
+    font-weight: 800;
+
+    letter-spacing: .4px;
+}
+
+.plan-card strong {
+    color: var(--naranja);
+
+    font-size: 20px;
+    font-weight: 900;
+
+    letter-spacing: -.4px;
+}
+
+
+/* =========================================================
+   YAPE
+   ========================================================= */
+
+.yape-panel {
+    margin-top: 18px;
+}
+
+.yape-panel h3 {
+    margin-bottom: 8px;
+
+    color: #ffffff;
+
+    font-size: 16px;
+    font-weight: 900;
+}
+
+.yape-panel p {
+    margin-bottom: 16px;
+
+    color: #777;
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+.yape-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    min-height: 72px;
+
+    margin-bottom: 16px;
+
+    padding: 15px 17px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 106, 0, .10),
+            #101010
+        );
+
+    border: 1px solid rgba(255, 106, 0, .16);
+
+    border-radius: 14px;
+}
+
+.yape-box strong {
+    color: var(--naranja);
+
+    font-size: 24px;
+    font-weight: 900;
+}
+
+.yape-box span {
+    padding: 6px 9px;
+
+    background: rgba(255, 255, 255, .05);
+
+    border-radius: 8px;
+
+    color: #999;
+
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.nota-pago {
+    margin-top: 13px !important;
+    margin-bottom: 0 !important;
+
+    color: #5f5f5f !important;
+
+    font-size: 10px !important;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   PERFIL
+   ========================================================= */
+
+.perfil-lista {
+    padding: 6px 17px;
+}
+
+.perfil-lista > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    min-height: 57px;
+
+    padding: 11px 0;
+
+    border-bottom: 1px solid rgba(255, 255, 255, .055);
+}
+
+.perfil-lista > div:last-child {
+    border-bottom: none;
+}
+
+.perfil-lista span {
+    flex-shrink: 0;
+
+    color: #666;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: .5px;
+}
+
+.perfil-lista strong {
+    min-width: 0;
+
+    color: #ffffff;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    text-align: right;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================================================
+   NAVEGACIÓN INFERIOR
+   ========================================================= */
+
+.bottom-nav {
+    position: fixed;
+
+    left: 50%;
+
+    bottom: 0;
+
+    z-index: 1000;
+
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    width: 100%;
+    max-width: 480px;
+
+    height: 72px;
+
+    transform: translateX(-50%);
+
+    padding:
+        7px 10px
+        calc(7px + env(safe-area-inset-bottom));
+
+    background: rgba(10, 10, 10, .94);
+
+    border-top: 1px solid rgba(255, 255, 255, .08);
+
+    box-shadow:
+        0 -12px 35px rgba(0, 0, 0, .38);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 4px;
+
+    min-width: 0;
+
+    border: none;
+
+    background: transparent;
+
+    color: #5e5e5e;
+
+    transition:
+        color .2s ease,
+        transform .15s ease;
+}
+
+.nav-item:active {
+    transform: scale(.94);
+}
+
+.nav-item span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 31px;
+    height: 26px;
+
+    border-radius: 9px;
+
+    font-size: 17px;
+
+    transition:
+        background .2s ease,
+        color .2s ease;
+}
+
+.nav-item small {
+    font-size: 9px;
+    font-weight: 700;
+
+    line-height: 1;
+}
+
+.nav-item.activo {
+    color: var(--naranja);
+}
+
+.nav-item.activo span {
+    background: rgba(255, 106, 0, .10);
+
+    color: var(--naranja);
+}
+
+
+/* =========================================================
+   ESTADOS DE BOTONES
+   ========================================================= */
+
+button:disabled {
+    opacity: .55;
+
+    cursor: not-allowed;
+
+    transform: none !important;
+}
+
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: #080808;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #292929;
+
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #3a3a3a;
+}
+
+
+/* =========================================================
+   SELECCIÓN DE TEXTO
+   ========================================================= */
+
+::selection {
+    background: rgba(255, 106, 0, .28);
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 380px) {
+
+    .contenido {
+        padding-left: 13px;
+        padding-right: 13px;
+    }
+
+    .header {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    .hero {
+        min-height: 165px;
+
+        padding: 20px 16px;
+
+        gap: 10px;
+    }
+
+    .hero h2 {
+        font-size: 22px;
+    }
+
+    .btn-asistencia {
+        padding: 0 11px;
+
+        font-size: 9px;
+    }
+
+    .acciones-grid {
+        gap: 7px;
+    }
+
+    .accion-card {
+        padding: 13px 9px;
+    }
+
+    .accion-card strong {
+        font-size: 10px;
+    }
+
+    .accion-card small {
+        font-size: 8px;
+    }
+
+    .panel {
+        padding: 14px;
+    }
+}
+
+
+/* =========================================================
+   PANTALLAS GRANDES
+   ========================================================= */
+
+@media (min-width: 481px) {
+
+    body {
+        padding: 0;
+    }
+
+    .app {
+        min-height: 100vh;
+
+        border-left: 1px solid rgba(255, 255, 255, .035);
+        border-right: 1px solid rgba(255, 255, 255, .035);
+    }
+}
