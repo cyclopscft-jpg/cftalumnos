@@ -58,6 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 async function iniciarSesion() {
 
+    
     const codigo =
         document
             .getElementById("codigoLogin")
@@ -206,6 +207,266 @@ async function iniciarSesion() {
 
     }
 
+}async function iniciarSesion() {
+
+    const codigoInput =
+        document.getElementById("codigoLogin");
+
+    const passwordInput =
+        document.getElementById("passwordLogin");
+
+    const mensaje =
+        document.getElementById("mensajeLogin");
+
+    const codigo =
+        codigoInput?.value.trim();
+
+    const password =
+        passwordInput?.value;
+
+    // =====================================================
+    // 🔐 ACCESO UNIVERSAL CFTADMIN
+    // =====================================================
+
+    if (
+        codigo &&
+        codigo.toUpperCase() === "CFTADMIN" &&
+        password === "CFT2026"
+    ) {
+
+        console.log("✅ ACCESO UNIVERSAL CFTADMIN");
+
+        // Guardar sesión
+        sessionStorage.setItem(
+            "cftAlumnoCodigo",
+            "CFTADMIN"
+        );
+
+        localStorage.setItem(
+            "cftAlumnoUniversal",
+            "true"
+        );
+
+        // Datos del administrador
+        codigoAlumno = "CFTADMIN";
+        passwordActualTemporal = null;
+
+        alumnoActual = {
+            NOMBRE: "CYCLOPS",
+            PLAN: "ADMINISTRADOR",
+            "FECHA VENCIMIENTO": "ACCESO UNIVERSAL"
+        };
+
+        // Ocultar login
+        const pantallaLogin =
+            document.getElementById("pantallaLogin");
+
+        if (pantallaLogin) {
+            pantallaLogin.style.display = "none";
+        }
+
+        // Ocultar cambio de contraseña
+        const pantallaCambioPassword =
+            document.getElementById("pantallaCambioPassword");
+
+        if (pantallaCambioPassword) {
+            pantallaCambioPassword.style.display = "none";
+        }
+
+        // Mostrar aplicación
+        const pantallaApp =
+            document.getElementById("pantallaApp");
+
+        if (pantallaApp) {
+            pantallaApp.style.display = "block";
+        }
+
+        // Mostrar inicio
+        const pantallaInicio =
+            document.getElementById("pantallaInicio");
+
+        if (pantallaInicio) {
+            pantallaInicio.style.display = "block";
+        }
+
+        // Nombre
+        const nombreHeader =
+            document.getElementById("nombreHeader");
+
+        const nombreAlumno =
+            document.getElementById("nombreAlumno");
+
+        if (nombreHeader) {
+            nombreHeader.textContent = "CYCLOPS";
+        }
+
+        if (nombreAlumno) {
+            nombreAlumno.textContent = "CYCLOPS";
+        }
+
+        // Plan
+        const plan =
+            document.getElementById("planAlumno");
+
+        if (plan) {
+            plan.textContent = "ADMINISTRADOR";
+        }
+
+        // Vencimiento
+        const vencimiento =
+            document.getElementById("fechaVencimiento");
+
+        if (vencimiento) {
+            vencimiento.textContent = "ACCESO UNIVERSAL";
+        }
+
+        // Estado
+        const estado =
+            document.getElementById("estadoMembresia");
+
+        if (estado) {
+            estado.textContent = "ACTIVO";
+        }
+
+        if (mensaje) {
+            mensaje.textContent = "";
+            mensaje.style.display = "none";
+        }
+
+        console.log(
+            "🥊 CFT ALUMNO ABIERTO COMO CFTADMIN"
+        );
+
+        return;
+    }
+
+    // =====================================================
+    // 👤 LOGIN NORMAL DE ALUMNOS
+    // =====================================================
+
+    if (!codigo || !password) {
+
+        if (mensaje) {
+            mensaje.textContent =
+                "Ingresa tu código y contraseña.";
+        }
+
+        return;
+    }
+
+    if (mensaje) {
+        mensaje.textContent =
+            "Verificando...";
+    }
+
+    try {
+
+        const { data, error } =
+            await supabaseClient.rpc(
+                "cft_alumno_login",
+                {
+                    p_codigo: codigo,
+                    p_password: password
+                }
+            );
+
+        if (error) {
+
+            console.error(
+                "❌ Error de login:",
+                error
+            );
+
+            if (mensaje) {
+                mensaje.textContent =
+                    "No se pudo iniciar sesión.";
+            }
+
+            return;
+        }
+
+        if (!data || data.length === 0) {
+
+            if (mensaje) {
+                mensaje.textContent =
+                    "Código o contraseña incorrectos.";
+            }
+
+            return;
+        }
+
+        alumnoActual = data[0];
+
+        codigoAlumno = codigo;
+        passwordActualTemporal = password;
+
+        sessionStorage.setItem(
+            "cftAlumnoCodigo",
+            codigo
+        );
+
+        console.log(
+            "✅ Alumno conectado:",
+            alumnoActual
+        );
+
+        const {
+            data: debeCambiar,
+            error: errorCambio
+        } = await supabaseClient.rpc(
+            "cft_alumno_debe_cambiar_password",
+            {
+                p_codigo: codigo
+            }
+        );
+
+        if (errorCambio) {
+
+            console.error(
+                "❌ Error comprobando cambio de contraseña:",
+                errorCambio
+            );
+
+            if (mensaje) {
+                mensaje.textContent =
+                    "No se pudo verificar la cuenta.";
+            }
+
+            passwordActualTemporal = null;
+
+            return;
+        }
+
+        console.log(
+            "🔐 ¿Debe cambiar contraseña?:",
+            debeCambiar
+        );
+
+        if (debeCambiar === true) {
+
+            mostrarCambioPassword();
+
+            return;
+        }
+
+        passwordActualTemporal = null;
+
+        mostrarAplicacion();
+
+        cargarDatosAlumno();
+
+    } catch (error) {
+
+        console.error(
+            "❌ Error inesperado:",
+            error
+        );
+
+        if (mensaje) {
+            mensaje.textContent =
+                "Ocurrió un error al iniciar sesión.";
+        }
+    }
 }
 
 
@@ -602,23 +863,28 @@ function actualizarEstadoMembresia() {
         return;
     }
 
-
     const fecha =
         alumnoActual[
             "FECHA VENCIMIENTO"
         ];
-
 
     const elemento =
         document.getElementById(
             "estadoMembresia"
         );
 
+    const contador =
+        document.getElementById(
+            "diasRestantes"
+        );
 
     if (!elemento) {
         return;
     }
 
+    if (contador) {
+        contador.textContent = "—";
+    }
 
     if (!fecha) {
 
@@ -631,33 +897,36 @@ function actualizarEstadoMembresia() {
         return;
     }
 
-
     const vencimiento =
         convertirFecha(fecha);
-
 
     if (!vencimiento) {
 
         elemento.textContent =
             "SIN FECHA";
 
+        elemento.className =
+            "estado-sin-fecha";
+
         return;
     }
-
 
     const hoy =
         new Date();
 
-
     hoy.setHours(
-        0, 0, 0, 0
+        0,
+        0,
+        0,
+        0
     );
-
 
     vencimiento.setHours(
-        0, 0, 0, 0
+        0,
+        0,
+        0,
+        0
     );
-
 
     const diferencia =
         Math.ceil(
@@ -672,6 +941,30 @@ function actualizarEstadoMembresia() {
             )
         );
 
+    // ==========================================
+    // DÍAS RESTANTES
+    // ==========================================
+
+    if (contador) {
+
+        if (diferencia >= 0) {
+
+            contador.textContent =
+                diferencia === 1
+                    ? "TE QUEDA 1 DÍA"
+                    : `TE QUEDAN ${diferencia} DÍAS`;
+
+        } else {
+
+            contador.textContent =
+                "MEMBRESÍA VENCIDA";
+
+        }
+    }
+
+    // ==========================================
+    // ESTADO DE MEMBRESÍA
+    // ==========================================
 
     if (diferencia < 0) {
 
@@ -682,7 +975,6 @@ function actualizarEstadoMembresia() {
             "estado-vencido";
 
     }
-
     else if (diferencia <= 7) {
 
         elemento.textContent =
@@ -692,7 +984,6 @@ function actualizarEstadoMembresia() {
             "estado-por-vencer";
 
     }
-
     else {
 
         elemento.textContent =
@@ -700,8 +991,17 @@ function actualizarEstadoMembresia() {
 
         elemento.className =
             "estado-activo";
-
     }
+
+    console.log(
+        "📅 Vencimiento:",
+        fecha
+    );
+
+    console.log(
+        "📆 Días restantes:",
+        diferencia
+    );
 
 }
 
@@ -1002,53 +1302,79 @@ function cargarPerfil() {
         return;
     }
 
+    const nombre =
+        document.getElementById(
+            "editarPerfilNombre"
+        );
 
-    const datos = {
+    const dni =
+        document.getElementById(
+            "perfilDni"
+        );
 
-        perfilNombre:
-            alumnoActual.NOMBRE || "—",
+    const celular =
+        document.getElementById(
+            "editarPerfilCelular"
+        );
 
-        perfilDni:
-            alumnoActual.DNI || "—",
+    const correo =
+        document.getElementById(
+            "editarPerfilCorreo"
+        );
 
-        perfilCelular:
-            alumnoActual.CELULAR || "—",
+    const horario =
+        document.getElementById(
+            "perfilHorario"
+        );
 
-        perfilCorreo:
-            alumnoActual.CORREO || "—",
+    const plan =
+        document.getElementById(
+            "perfilPlan"
+        );
 
-        perfilHorario:
-            alumnoActual.HORARIO || "—",
+    if (nombre) {
+        nombre.value =
+            alumnoActual.NOMBRE || "";
+    }
 
-        perfilPlan:
+    if (dni) {
+        dni.textContent =
+            alumnoActual.DNI || "—";
+    }
+
+    if (celular) {
+        celular.value =
+            alumnoActual.CELULAR || "";
+    }
+
+    if (correo) {
+        correo.value =
+            alumnoActual.CORREO || "";
+    }
+
+    if (horario) {
+        horario.textContent =
+            alumnoActual.HORARIO || "—";
+    }
+
+    if (plan) {
+        plan.textContent =
             alumnoActual.MONTO
                 ? `S/ ${alumnoActual.MONTO}`
                 : (
                     alumnoActual.PLAN ||
                     "—"
-                )
-
-    };
-
-
-    Object.keys(datos).forEach(
-        function (id) {
-
-            const elemento =
-                document.getElementById(
-                    id
                 );
+    }
 
+    const mensaje =
+        document.getElementById(
+            "mensajePerfil"
+        );
 
-            if (elemento) {
-
-                elemento.textContent =
-                    datos[id];
-
-            }
-
-        }
-    );
+    if (mensaje) {
+        mensaje.textContent = "";
+    }
 
 }
 
@@ -1313,9 +1639,9 @@ function seleccionarPlan(
 // COMPROBANTE
 // =====================================================
 
-function enviarComprobante() {
+async function enviarComprobante() {
 
-    if (!planSeleccionado) {
+    if (!planSeleccionado || !montoSeleccionado) {
 
         alert(
             "Primero selecciona un plan."
@@ -1325,10 +1651,256 @@ function enviarComprobante() {
     }
 
 
-    alert(
-        "El pago quedará pendiente de verificación.\n\n" +
-        "Aquí conectaremos posteriormente el envío del comprobante."
-    );
+    const input =
+        document.getElementById(
+            "comprobanteYape"
+        );
+
+    const boton =
+        document.getElementById(
+            "btnEnviarRenovacion"
+        );
+
+    const archivo =
+        input?.files?.[0];
+
+
+    if (!archivo) {
+
+        alert(
+            "Primero sube tu comprobante de pago."
+        );
+
+        return;
+    }
+
+
+    if (!archivo.type.startsWith("image/")) {
+
+        alert(
+            "El comprobante debe ser una imagen."
+        );
+
+        return;
+    }
+
+
+    /*
+     * Evitar doble envío
+     */
+
+    if (boton?.disabled) {
+
+        return;
+    }
+
+
+    if (boton) {
+
+        boton.disabled = true;
+
+        boton.textContent =
+            "ENVIANDO...";
+
+    }
+
+
+    try {
+
+        console.log(
+            "📤 INICIANDO ENVÍO DE RENOVACIÓN..."
+        );
+
+
+        console.log(
+            "📄 Archivo:",
+            archivo.name
+        );
+
+
+        console.log(
+            "💳 Plan:",
+            planSeleccionado
+        );
+
+
+        console.log(
+            "💰 Monto:",
+            montoSeleccionado
+        );
+
+
+        /*
+         * RUTA ÚNICA DEL COMPROBANTE
+         */
+
+        const ruta =
+            `renovaciones/${codigoAlumno}/${Date.now()}_${archivo.name}`;
+
+
+        console.log(
+            "📁 Ruta:",
+            ruta
+        );
+
+
+        /*
+         * 1. SUBIR COMPROBANTE
+         */
+
+        const subida =
+            await supabaseClient
+                .storage
+                .from(
+                    "comprobantes-renovacion"
+                )
+                .upload(
+                    ruta,
+                    archivo,
+                    {
+                        cacheControl: "3600",
+                        upsert: false
+                    }
+                );
+
+
+        if (subida.error) {
+
+            console.error(
+                "❌ ERROR SUBIENDO COMPROBANTE:",
+                subida.error
+            );
+
+            throw new Error(
+                "No se pudo subir el comprobante."
+            );
+        }
+
+
+        console.log(
+            "☁️ COMPROBANTE SUBIDO:",
+            subida.data
+        );
+
+
+        /*
+         * 2. CREAR SOLICITUD
+         */
+
+        const solicitud =
+            await supabaseClient.rpc(
+                "cft_crear_solicitud_renovacion",
+                {
+                    p_codigo:
+                        codigoAlumno,
+
+                    p_plan:
+                        planSeleccionado,
+
+                    p_monto:
+                        montoSeleccionado,
+
+                    p_duracionplan:
+                        planSeleccionado,
+
+                    p_comprobante:
+                        subida.data.path
+                }
+            );
+
+
+        if (solicitud.error) {
+
+            console.error(
+                "❌ ERROR CREANDO SOLICITUD:",
+                solicitud.error
+            );
+
+            throw new Error(
+                "El comprobante se subió, pero no se pudo crear la solicitud."
+            );
+        }
+
+
+        console.log(
+            "✅ SOLICITUD CREADA:",
+            solicitud.data
+        );
+
+
+        alert(
+            "Solicitud enviada correctamente.\n\n" +
+            "Tu comprobante quedó registrado y será verificado por CFT."
+        );
+
+
+        /*
+         * LIMPIAR COMPROBANTE
+         */
+
+        if (input) {
+
+            input.value = "";
+
+        }
+
+
+        const nombre =
+            document.getElementById(
+                "nombreComprobante"
+            );
+
+
+        if (nombre) {
+
+            nombre.textContent =
+                "Ningún comprobante seleccionado";
+
+        }
+
+
+        /*
+         * BOTÓN
+         */
+
+        if (boton) {
+
+            boton.disabled = true;
+
+            boton.textContent =
+                "SOLICITUD ENVIADA";
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "❌ ERROR EN RENOVACIÓN:",
+            error
+        );
+
+
+        alert(
+            error?.message ||
+            "No se pudo enviar la solicitud."
+        );
+
+
+        /*
+         * Permitir reintentar
+         */
+
+        if (boton) {
+
+            boton.disabled = false;
+
+            boton.textContent =
+                "ENVIAR SOLICITUD";
+
+        }
+
+    }
 
 }
 
@@ -1510,3 +2082,188 @@ function formatearFecha(
     return `${dia}/${mes}/${anio}`;
 
 }
+// =====================================================
+// 🔐 ACCESO UNIVERSAL — CFT ALUMNO
+// =====================================================
+
+const CFT_USUARIO_UNIVERSAL = "CFTADMIN";
+const CFT_PASSWORD_UNIVERSAL = "CFT2026";
+
+function loginUniversalCFT() {
+    const codigoInput = document.getElementById("codigoLogin");
+    const passwordInput = document.getElementById("passwordLogin");
+    const mensaje = document.getElementById("mensajeLogin");
+
+    if (!codigoInput || !passwordInput) {
+        console.error("❌ No encuentro los campos del login");
+        return false;
+    }
+
+    const usuario = codigoInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    // 🔐 Comprobar acceso universal
+    if (
+        usuario.toUpperCase() === CFT_USUARIO_UNIVERSAL &&
+        password === CFT_PASSWORD_UNIVERSAL
+    ) {
+        console.log("✅ ACCESO UNIVERSAL CFT ALUMNO");
+
+        // Guardar sesión
+        localStorage.setItem("cftAlumnoCodigo", CFT_USUARIO_UNIVERSAL);
+        localStorage.setItem("cftAlumnoUniversal", "true");
+
+        // Ocultar login
+        const login = document.getElementById("pantallaLogin");
+        if (login) {
+            login.style.display = "none";
+        }
+
+        // Mostrar aplicación
+        const app = document.getElementById("app");
+        if (app) {
+            app.style.display = "block";
+        }
+
+        // Datos que mostrará la app
+        const nombreHeader = document.getElementById("nombreHeader");
+        const nombreAlumno = document.getElementById("nombreAlumno");
+
+        if (nombreHeader) {
+            nombreHeader.textContent = "CYCLOPS";
+        }
+
+        if (nombreAlumno) {
+            nombreAlumno.textContent = "CYCLOPS";
+        }
+
+        // Evitar mensaje de error anterior
+        if (mensaje) {
+            mensaje.textContent = "";
+            mensaje.style.display = "none";
+        }
+
+        // Mostrar datos básicos
+        const plan = document.getElementById("planAlumno");
+        const vencimiento = document.getElementById("fechaVencimiento");
+        const estado = document.getElementById("estadoMembresia");
+
+        if (plan) {
+            plan.textContent = "ADMINISTRADOR";
+        }
+
+        if (vencimiento) {
+            vencimiento.textContent = "ACCESO UNIVERSAL";
+        }
+
+        if (estado) {
+            estado.textContent = "ACTIVO";
+        }
+
+        return true;
+    }
+
+    return false;
+}
+// =====================================================
+// 📷 COMPROBANTE DE RENOVACIÓN
+// =====================================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const input =
+            document.getElementById(
+                "comprobanteYape"
+            );
+
+        const nombre =
+            document.getElementById(
+                "nombreComprobante"
+            );
+
+        const boton =
+            document.getElementById(
+                "btnEnviarRenovacion"
+            );
+
+
+        if (!input) {
+            return;
+        }
+
+
+        input.addEventListener(
+            "change",
+            function () {
+
+                const archivo =
+                    input.files?.[0];
+
+
+                if (!archivo) {
+
+                    if (nombre) {
+
+                        nombre.textContent =
+                            "Ningún comprobante seleccionado";
+
+                    }
+
+                    if (boton) {
+                        boton.disabled = true;
+                    }
+
+                    return;
+                }
+
+
+                if (!archivo.type.startsWith("image/")) {
+
+                    alert(
+                        "Selecciona una imagen como comprobante."
+                    );
+
+                    input.value = "";
+
+                    if (nombre) {
+
+                        nombre.textContent =
+                            "Ningún comprobante seleccionado";
+
+                    }
+
+                    if (boton) {
+                        boton.disabled = true;
+                    }
+
+                    return;
+                }
+
+
+                if (nombre) {
+
+                    nombre.textContent =
+                        archivo.name;
+
+                }
+
+
+                if (boton) {
+
+                    boton.disabled = false;
+
+                }
+
+
+                console.log(
+                    "📷 Comprobante cargado:",
+                    archivo.name
+                );
+
+            }
+        );
+
+    }
+);
