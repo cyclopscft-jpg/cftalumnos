@@ -5,11 +5,211 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>CFT Alumno</title>
+<link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+>
 
+<link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+>
     <link rel="stylesheet" href="style.css">
 
-    <!-- Supabase -->
+      <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- DISEÑO MODERNO CFT PERFIL -->
+    <style id="cftPerfilModerno">
+
+    #pantallaPerfil {
+        padding: 16px 14px 90px !important;
+    }
+
+    #pantallaPerfil .titulo-pantalla {
+        margin-bottom: 18px !important;
+        align-items: center !important;
+    }
+
+    #pantallaPerfil .titulo-pantalla button {
+        width: 38px !important;
+        height: 38px !important;
+        border-radius: 12px !important;
+        background: #171717 !important;
+        border: 1px solid rgba(255,106,0,.45) !important;
+        color: #fff !important;
+        font-size: 20px !important;
+    }
+
+    #pantallaPerfil .titulo-pantalla h2 {
+        font-size: 21px !important;
+        font-weight: 700 !important;
+        letter-spacing: -.4px !important;
+        margin: 0 !important;
+        color: #fff !important;
+    }
+
+    #pantallaPerfil .titulo-pantalla p {
+        margin-top: 3px !important;
+        color: #777 !important;
+        font-size: 12px !important;
+    }
+
+    #pantallaPerfil .perfil-lista {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 10px !important;
+        padding: 0 !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    #pantallaPerfil .perfil-lista > div {
+        position: relative !important;
+        min-width: 0 !important;
+        min-height: 68px !important;
+        box-sizing: border-box !important;
+        padding: 12px 13px !important;
+        border-radius: 17px !important;
+        background: #151515 !important;
+        border: 1px solid rgba(255,255,255,.055) !important;
+        box-shadow:
+            0 8px 20px rgba(0,0,0,.22),
+            inset 0 1px 0 rgba(255,255,255,.025) !important;
+        overflow: hidden !important;
+    }
+
+    #pantallaPerfil .perfil-lista > div:has(input) {
+        border-color: rgba(255,106,0,.18) !important;
+    }
+
+    #pantallaPerfil .perfil-lista > div:has(input)::after {
+        content: "" !important;
+        position: absolute !important;
+        left: 0 !important;
+        top: 14px !important;
+        bottom: 14px !important;
+        width: 3px !important;
+        border-radius: 0 4px 4px 0 !important;
+        background: #ff6a00 !important;
+    }
+
+    #pantallaPerfil .perfil-lista > div:nth-child(1),
+    #pantallaPerfil .perfil-lista > div:nth-child(4) {
+        grid-column: span 2 !important;
+    }
+
+    #pantallaPerfil .perfil-lista span {
+        display: block !important;
+        margin: 0 0 6px !important;
+        color: #777 !important;
+        font-size: 9px !important;
+        font-weight: 700 !important;
+        letter-spacing: 1.2px !important;
+        text-transform: uppercase !important;
+    }
+
+    #pantallaPerfil .perfil-lista input {
+        width: 100% !important;
+        box-sizing: border-box !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        background: transparent !important;
+        border: none !important;
+        outline: none !important;
+        color: #fff !important;
+        font-size: 14px !important;
+        font-weight: 600 !important;
+    }
+
+    #pantallaPerfil .perfil-lista input::placeholder {
+        color: #555 !important;
+    }
+
+    #pantallaPerfil .perfil-lista strong {
+        display: block !important;
+        color: #e8e8e8 !important;
+        font-size: 14px !important;
+        font-weight: 600 !important;
+    }
+
+    #pantallaPerfil #btnGuardarPerfil {
+        grid-column: span 2 !important;
+        width: 100% !important;
+        height: 48px !important;
+        margin-top: 5px !important;
+        border-radius: 16px !important;
+        background: linear-gradient(
+            135deg,
+            #1b1b1b,
+            #101010
+        ) !important;
+        border: 1px solid #ff6a00 !important;
+        color: #fff !important;
+        font-size: 12px !important;
+        font-weight: 800 !important;
+        letter-spacing: 1px !important;
+        box-shadow:
+            0 8px 24px rgba(0,0,0,.3),
+            0 0 18px rgba(255,106,0,.08) !important;
+    }
+
+    #pantallaPerfil #btnGuardarPerfil:active {
+        transform: scale(.98) !important;
+    }
+
+    #pantallaPerfil #mensajePerfil {
+        grid-column: span 2 !important;
+        margin: -2px 0 0 !important;
+        color: #ff8a3d !important;
+        font-size: 11px !important;
+    }
+
+    @media (max-width: 380px) {
+
+        #pantallaPerfil .perfil-lista {
+            gap: 8px !important;
+        }
+
+        #pantallaPerfil .perfil-lista > div {
+            min-height: 64px !important;
+
+            padding: 11px 12px !important;
+
+        }
+
+    }
+
+    </style>
+    <style id="cftDiasRestantes">
+
+.estado-membresia-linea {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: nowrap;
+}
+
+.estado-membresia-linea strong {
+    white-space: nowrap;
+}
+
+#diasRestantes {
+    color: #ff6a00;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+    letter-spacing: .3px;
+}
+
+</style>
 </head>
 
 <body>
@@ -151,12 +351,19 @@
 
                     <div class="membresia-card">
 
-                        <div>
-                            <span class="label">ESTADO</span>
-                            <strong id="estadoMembresia">
-                                Cargando...
-                            </strong>
-                        </div>
+                        <div class="estado-membresia-item">
+    <span class="label">ESTADO</span>
+
+    <div class="estado-membresia-linea">
+        <strong id="estadoMembresia">
+            Cargando...
+        </strong>
+
+        <span id="diasRestantes">
+            —
+        </span>
+    </div>
+</div>
 
                         <div>
                             <span class="label">VENCIMIENTO</span>
@@ -267,146 +474,272 @@
             </main>
 
 
-            <!-- RENOVACIÓN -->
-            <main
-                id="pantallaRenovacion"
-                class="contenido"
-                style="display:none;"
+         <!-- RENOVACIÓN -->
+<main
+    id="pantallaRenovacion"
+    class="contenido"
+    style="display:none;"
+>
+
+    <div class="titulo-pantalla">
+
+        <button onclick="volverInicio()">←</button>
+
+        <div>
+            <h2>Renovar membresía</h2>
+            <p>Elige tu plan</p>
+        </div>
+
+    </div>
+
+
+    <!-- PLANES -->
+    <section class="planes-grid">
+
+        <button
+            class="plan-card"
+            onclick="seleccionarPlan(1,130)"
+        >
+            <span>1 MES</span>
+            <strong>S/ 130</strong>
+        </button>
+
+        <button
+            class="plan-card"
+            onclick="seleccionarPlan(2,220)"
+        >
+            <span>2 MESES</span>
+            <strong>S/ 220</strong>
+        </button>
+
+        <button
+            class="plan-card"
+            onclick="seleccionarPlan(3,300)"
+        >
+            <span>3 MESES</span>
+            <strong>S/ 300</strong>
+        </button>
+
+    </section>
+
+
+    <!-- PAGO YAPE -->
+    <!-- PAGO YAPE / PLIN -->
+
+<section
+    id="panelYape"
+    class="panel yape-panel"
+    style="display:none;"
+>
+
+    <!-- TÍTULO -->
+
+    <div class="yape-titulo">
+
+        <h3>
+            Paga con Yape o Plin
+        </h3>
+
+        <p>
+            Escanea el QR o usa el número de pago
+        </p>
+
+    </div>
+
+
+    <!-- QR -->
+
+    <div class="yape-qr">
+
+        <img
+            id="qrPago"
+            src="qr-yape.png"
+            alt="QR de pago Yape o Plin"
+        >
+
+    </div>
+
+
+    <!-- NÚMERO -->
+
+    <div class="numero-pago">
+
+        <span>
+            NÚMERO DE PAGO
+        </span>
+
+        <strong>
+            908 664 973
+        </strong>
+
+    </div>
+
+
+    <!-- MONTO -->
+
+    <div class="yape-monto">
+
+        <span>
+            MONTO A PAGAR
+        </span>
+
+        <strong id="montoYape">
+            -
+        </strong>
+
+    </div>
+
+
+    <!-- COMPROBANTE -->
+
+    <div class="yape-comprobante">
+
+        <input
+            type="file"
+            id="comprobanteYape"
+            accept="image/*"
+            hidden
+        >
+
+        <button
+            type="button"
+            onclick="document.getElementById('comprobanteYape').click()"
+            class="btn-principal"
+        >
+            📷 SUBIR COMPROBANTE
+        </button>
+
+        <p id="nombreComprobante">
+            Ningún comprobante seleccionado
+        </p>
+
+    </div>
+
+
+    <!-- ENVIAR SOLICITUD -->
+
+    <button
+        id="btnEnviarRenovacion"
+        onclick="enviarComprobante()"
+        class="btn-principal"
+        disabled
+    >
+        ENVIAR SOLICITUD
+    </button>
+
+
+    <!-- NOTA -->
+
+    <p class="nota-pago">
+
+        Tu membresía se actualizará después de verificar
+        el comprobante.
+
+    </p>
+
+</section>
+
+</main>
+
+          <!-- PERFIL -->
+<main
+    id="pantallaPerfil"
+    class="contenido"
+    style="display:none;"
+>
+
+    <div class="titulo-pantalla">
+
+        <button onclick="volverInicio()">←</button>
+
+        <div>
+            <h2>Mi perfil</h2>
+            <p>Información de mi cuenta</p>
+        </div>
+
+    </div>
+
+
+    <section class="panel perfil-lista">
+
+        <div>
+            <span>NOMBRE</span>
+
+            <input
+                id="editarPerfilNombre"
+                type="text"
+                placeholder="Tu nombre"
             >
-
-                <div class="titulo-pantalla">
-
-                    <button onclick="volverInicio()">←</button>
-
-                    <div>
-                        <h2>Renovar membresía</h2>
-                        <p>Elige tu plan</p>
-                    </div>
-
-                </div>
+        </div>
 
 
-                <section class="planes-grid">
+        <div>
+            <span>DNI</span>
 
-                    <button
-                        class="plan-card"
-                        onclick="seleccionarPlan(1,130)"
-                    >
-                        <span>1 MES</span>
-                        <strong>S/ 130</strong>
-                    </button>
-
-                    <button
-                        class="plan-card"
-                        onclick="seleccionarPlan(2,220)"
-                    >
-                        <span>2 MESES</span>
-                        <strong>S/ 220</strong>
-                    </button>
-
-                    <button
-                        class="plan-card"
-                        onclick="seleccionarPlan(3,300)"
-                    >
-                        <span>3 MESES</span>
-                        <strong>S/ 300</strong>
-                    </button>
-
-                </section>
+            <strong id="perfilDni">
+                —
+            </strong>
+        </div>
 
 
-                <section
-                    id="panelYape"
-                    class="panel yape-panel"
-                    style="display:none;"
-                >
+        <div>
+            <span>CELULAR</span>
 
-                    <h3>Pago por Yape</h3>
-
-                    <p>
-                        Realiza el pago del plan seleccionado
-                        y envía tu comprobante.
-                    </p>
-
-                    <div class="yape-box">
-                        <strong id="montoYape">
-                            S/ 0
-                        </strong>
-
-                        <span>
-                            Yape
-                        </span>
-                    </div>
-
-                    <button
-                        onclick="enviarComprobante()"
-                        class="btn-principal"
-                    >
-                        ENVIÉ MI COMPROBANTE
-                    </button>
-
-                    <p class="nota-pago">
-                        Tu renovación quedará pendiente de
-                        verificación.
-                    </p>
-
-                </section>
-
-            </main>
-
-
-            <!-- PERFIL -->
-            <main
-                id="pantallaPerfil"
-                class="contenido"
-                style="display:none;"
+            <input
+                id="editarPerfilCelular"
+                type="tel"
+                placeholder="Tu celular"
             >
-
-                <div class="titulo-pantalla">
-
-                    <button onclick="volverInicio()">←</button>
-
-                    <div>
-                        <h2>Mi perfil</h2>
-                        <p>Información de mi cuenta</p>
-                    </div>
-
-                </div>
+        </div>
 
 
-                <section class="panel perfil-lista">
+        <div>
+            <span>CORREO</span>
 
-                    <div>
-                        <span>Nombre</span>
-                        <strong id="perfilNombre">—</strong>
-                    </div>
+            <input
+                id="editarPerfilCorreo"
+                type="email"
+                placeholder="tu@email.com"
+            >
+        </div>
 
-                    <div>
-                        <span>DNI</span>
-                        <strong id="perfilDni">—</strong>
-                    </div>
 
-                    <div>
-                        <span>Celular</span>
-                        <strong id="perfilCelular">—</strong>
-                    </div>
+        <div>
+            <span>HORARIO</span>
 
-                    <div>
-                        <span>Correo</span>
-                        <strong id="perfilCorreo">—</strong>
-                    </div>
+            <strong id="perfilHorario">
+                —
+            </strong>
+        </div>
 
-                    <div>
-                        <span>Horario</span>
-                        <strong id="perfilHorario">—</strong>
-                    </div>
 
-                    <div>
-                        <span>Plan</span>
-                        <strong id="perfilPlan">—</strong>
-                    </div>
+        <div>
+            <span>PLAN</span>
 
-                </section>
+            <strong id="perfilPlan">
+                —
+            </strong>
+        </div>
+
+
+        <button
+            id="btnGuardarPerfil"
+            onclick="guardarPerfil()"
+        >
+            GUARDAR CAMBIOS
+        </button>
+
+
+        <p
+            id="mensajePerfil"
+            style="
+                text-align:center;
+                margin-top:10px;
+                font-size:14px;
+            "
+        ></p>
+
+    </section>
 
             </main>
 
