@@ -849,10 +849,121 @@ function cargarDatosAlumno() {
     cargarResumenAsistencia();
 
     cargarPerfil();
-
+cargarLutaLivreInicio();
 }
 
+async function cargarLutaLivreInicio() {
+    console.log("🥋 CARGANDO LUTA LIVRE EN INICIO");
 
+    const tarjetaAnterior = document.getElementById("cftLutaGradoPrincipal");
+
+    if (tarjetaAnterior) {
+        tarjetaAnterior.remove();
+    }
+
+    if (!alumnoActual || !alumnoActual.id) {
+        console.log("⚠️ No existe alumnoActual");
+        return;
+    }
+
+    const { data, error } = await supabaseClient
+        .from("CFT_LutaLivre_Graduaciones")
+        .select("cinturon, fecha_graduacion")
+        .eq("alumno_id", alumnoActual.id)
+        .order("fecha_graduacion", { ascending: false })
+        .limit(1);
+
+    if (error) {
+        console.error("❌ Error Luta Livre:", error);
+        return;
+    }
+
+    const panelMembresia = [...document.querySelectorAll("#pantallaInicio .panel")]
+        .find(panel =>
+            panel.querySelector(".membresia-card") &&
+            panel.textContent.includes("Mi membresía")
+        );
+
+    if (!panelMembresia) {
+        console.error("❌ No se encontró el panel Mi membresía");
+        return;
+    }
+
+    const tarjeta = document.createElement("div");
+
+    tarjeta.id = "cftLutaGradoPrincipal";
+
+    tarjeta.style.cssText = `
+        background:#111;
+        border:1px solid #252525;
+        border-radius:18px;
+        padding:18px 20px;
+        margin-top:14px;
+        box-sizing:border-box;
+        width:100%;
+    `;
+
+    if (!data || data.length === 0) {
+
+        tarjeta.innerHTML = `
+            <div style="
+                color:#888;
+                font-size:11px;
+                letter-spacing:1px;
+                margin-bottom:7px;
+                font-weight:600;
+            ">
+                LUTA LIVRE
+            </div>
+
+            <div style="
+                font-size:18px;
+                font-weight:700;
+                color:#fff;
+            ">
+                🥋 Sin graduación registrada
+            </div>
+        `;
+
+    } else {
+
+        tarjeta.innerHTML = `
+            <div style="
+                color:#888;
+                font-size:11px;
+                letter-spacing:1px;
+                margin-bottom:7px;
+                font-weight:600;
+            ">
+                LUTA LIVRE
+            </div>
+
+            <div style="
+                font-size:21px;
+                font-weight:700;
+                color:#fff;
+            ">
+                🥋 Cinturón ${data[0].cinturon}
+            </div>
+
+            <div style="
+                color:#777;
+                font-size:12px;
+                margin-top:5px;
+            ">
+                Grado actual
+            </div>
+        `;
+    }
+
+    panelMembresia.appendChild(tarjeta);
+
+    console.log(
+        data?.length
+            ? `✅ CINTURÓN MOSTRADO: ${data[0].cinturon}`
+            : "✅ SIN GRADUACIÓN REGISTRADA"
+    );
+}
 // =====================================================
 // ESTADO DE MEMBRESÍA
 // =====================================================
@@ -2267,3 +2378,235 @@ document.addEventListener(
 
     }
 );
+async function mostrarGraduaciones() {
+
+    console.log("🥋 ABRIENDO GRADUACIONES");
+
+    if (!alumnoActual || !alumnoActual.id) {
+        console.error("❌ No existe alumnoActual");
+        return;
+    }
+
+    const { data, error } = await supabaseClient
+        .from("CFT_LutaLivre_Graduaciones")
+        .select("*")
+        .eq("alumno_id", alumnoActual.id)
+        .order("fecha_graduacion", { ascending: false });
+
+    if (error) {
+        console.error("❌ Error cargando graduaciones:", error);
+        alert("No se pudieron cargar las graduaciones.");
+        return;
+    }
+
+    console.log("🥋 GRADUACIONES:", data);
+
+    let pantalla = document.getElementById("cftPantallaGraduaciones");
+
+    if (!pantalla) {
+        pantalla = document.createElement("div");
+        pantalla.id = "cftPantallaGraduaciones";
+
+        pantalla.style.position = "fixed";
+        pantalla.style.inset = "0";
+        pantalla.style.zIndex = "99999";
+        pantalla.style.background = "#000";
+        pantalla.style.color = "#fff";
+        pantalla.style.overflowY = "auto";
+        pantalla.style.padding = "24px";
+        pantalla.style.boxSizing = "border-box";
+        pantalla.style.fontFamily = "Inter, Arial, sans-serif";
+
+        document.body.appendChild(pantalla);
+    }
+
+    const nombre = alumnoActual.NOMBRE || "Alumno";
+
+    let contenido = `
+        <div style="
+            max-width:600px;
+            margin:0 auto;
+        ">
+
+            <button
+                onclick="document.getElementById('cftPantallaGraduaciones').remove()"
+                style="
+                    background:#111;
+                    color:#fff;
+                    border:1px solid #333;
+                    border-radius:12px;
+                    padding:10px 16px;
+                    font-size:14px;
+                    cursor:pointer;
+                    margin-bottom:24px;
+                ">
+                ← Volver
+            </button>
+
+            <div style="
+                font-size:13px;
+                color:#aaa;
+                margin-bottom:6px;
+                text-transform:uppercase;
+                letter-spacing:1px;
+            ">
+                CFT ALUMNO
+            </div>
+
+            <h1 style="
+                margin:0 0 8px;
+                font-size:28px;
+            ">
+                🥋 Graduaciones
+            </h1>
+
+            <div style="
+                color:#999;
+                margin-bottom:28px;
+                font-size:14px;
+            ">
+                ${nombre}
+            </div>
+    `;
+
+    if (!data || data.length === 0) {
+
+        contenido += `
+            <div style="
+                background:#111;
+                border:1px solid #222;
+                border-radius:18px;
+                padding:30px 20px;
+                text-align:center;
+            ">
+                <div style="
+                    font-size:42px;
+                    margin-bottom:12px;
+                ">
+                    🥋
+                </div>
+
+                <div style="
+                    font-size:17px;
+                    font-weight:600;
+                    margin-bottom:8px;
+                ">
+                    Sin graduaciones registradas
+                </div>
+
+                <div style="
+                    color:#888;
+                    font-size:14px;
+                ">
+                    Aquí aparecerá tu historial de cinturones.
+                </div>
+            </div>
+        `;
+
+    } else {
+
+        const actual = data[0];
+
+        contenido += `
+            <div style="
+                background:#111;
+                border:1px solid #252525;
+                border-radius:20px;
+                padding:22px;
+                margin-bottom:24px;
+            ">
+
+                <div style="
+                    color:#888;
+                    font-size:11px;
+                    letter-spacing:1.2px;
+                    margin-bottom:8px;
+                ">
+                    CINTURÓN ACTUAL
+                </div>
+
+                <div style="
+                    font-size:25px;
+                    font-weight:700;
+                ">
+                    🥋 ${actual.cinturon}
+                </div>
+
+                <div style="
+                    color:#888;
+                    font-size:13px;
+                    margin-top:6px;
+                ">
+                    ${new Date(actual.fecha_graduacion + "T00:00:00")
+                        .toLocaleDateString("es-PE")}
+                </div>
+
+            </div>
+
+            <div style="
+                font-size:12px;
+                color:#888;
+                letter-spacing:1px;
+                margin-bottom:12px;
+            ">
+                HISTORIAL DE GRADUACIONES
+            </div>
+        `;
+
+        data.forEach((graduacion, index) => {
+
+            const fecha = new Date(
+                graduacion.fecha_graduacion + "T00:00:00"
+            ).toLocaleDateString("es-PE");
+
+            contenido += `
+                <div style="
+                    background:#111;
+                    border:1px solid #222;
+                    border-radius:16px;
+                    padding:18px;
+                    margin-bottom:10px;
+                    display:flex;
+                    align-items:center;
+                    justify-content:space-between;
+                ">
+
+                    <div>
+
+                        <div style="
+                            font-size:17px;
+                            font-weight:600;
+                        ">
+                            🥋 ${graduacion.cinturon}
+                        </div>
+
+                        <div style="
+                            color:#777;
+                            font-size:13px;
+                            margin-top:5px;
+                        ">
+                            ${fecha}
+                        </div>
+
+                    </div>
+
+                    <div style="
+                        color:#555;
+                        font-size:11px;
+                    ">
+                        ${index === 0 ? "ACTUAL" : ""}
+                    </div>
+
+                </div>
+            `;
+        });
+    }
+
+    contenido += `
+        </div>
+    `;
+
+    pantalla.innerHTML = contenido;
+
+    console.log("✅ Graduaciones mostradas");
+}
