@@ -2140,3 +2140,18 @@ button:disabled {
 
     text-align: center;
 }
+.bottom-nav {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    align-items: stretch;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.bottom-nav .nav-item {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 8px 2px;
+}
