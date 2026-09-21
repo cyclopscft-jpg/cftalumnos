@@ -55,7 +55,206 @@ document.addEventListener("DOMContentLoaded", function () {
 // =====================================================
 // LOGIN
 // =====================================================
+// =====================================================
+// 🔔 PUSH AUTOMÁTICO CFT ALUMNO
+// =====================================================
 
+async function registrarPushAlumnoAutomatico() {
+
+    console.log(
+        "🔔 INICIANDO REGISTRO AUTOMÁTICO PUSH..."
+    );
+
+    try {
+
+        if (
+            !alumnoActual ||
+            !alumnoActual.id
+        ) {
+            console.log(
+                "⚠️ No existe alumnoActual.id. Push omitido."
+            );
+            return;
+        }
+
+        if (
+            !codigoAlumno ||
+            !String(codigoAlumno).trim()
+        ) {
+            console.log(
+                "⚠️ No existe codigoAlumno. Push omitido."
+            );
+            return;
+        }
+
+        if (
+            Notification.permission !==
+            "granted"
+        ) {
+            console.log(
+                "⚠️ Permiso Push:",
+                Notification.permission
+            );
+            return;
+        }
+
+        const registro =
+            await navigator.serviceWorker
+                .getRegistration("/");
+
+        if (!registro) {
+            console.log(
+                "⚠️ No existe Service Worker. Push omitido."
+            );
+            return;
+        }
+
+        console.log(
+            "⚙️ SERVICE WORKER OK"
+        );
+
+        let suscripcion =
+            await registro.pushManager
+                .getSubscription();
+
+        if (!suscripcion) {
+
+            console.log(
+                "📭 No existe suscripción Push. Creando..."
+            );
+
+            if (
+                !window.cftNuevaPublica
+            ) {
+                console.error(
+                    "❌ No existe la clave VAPID pública."
+                );
+                return;
+            }
+
+            const urlBase64ToUint8Array =
+                base64String => {
+
+                    const padding =
+                        "=".repeat(
+                            (
+                                4 -
+                                (
+                                    base64String.length %
+                                    4
+                                )
+                            ) % 4
+                        );
+
+                    const base64 =
+                        (
+                            base64String +
+                            padding
+                        )
+                            .replace(
+                                /-/g,
+                                "+"
+                            )
+                            .replace(
+                                /_/g,
+                                "/"
+                            );
+
+                    const rawData =
+                        atob(base64);
+
+                    return Uint8Array.from(
+                        [...rawData].map(
+                            char =>
+                                char.charCodeAt(
+                                    0
+                                )
+                        )
+                    );
+                };
+
+            suscripcion =
+                await registro.pushManager
+                    .subscribe({
+                        userVisibleOnly:
+                            true,
+
+                        applicationServerKey:
+                            urlBase64ToUint8Array(
+                                window.cftNuevaPublica
+                            )
+                    });
+
+            console.log(
+                "✅ NUEVA SUSCRIPCIÓN PUSH CREADA"
+            );
+        }
+
+        const datosPush =
+            suscripcion.toJSON();
+
+        if (
+            !datosPush?.endpoint ||
+            !datosPush?.keys?.p256dh ||
+            !datosPush?.keys?.auth
+        ) {
+            console.error(
+                "❌ SUSCRIPCIÓN PUSH INCOMPLETA"
+            );
+            return;
+        }
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient.rpc(
+                "cft_alumno_registrar_push",
+                {
+                    p_codigo:
+                        codigoAlumno,
+
+                    p_endpoint:
+                        datosPush.endpoint,
+
+                    p_p256dh:
+                        datosPush.keys.p256dh,
+
+                    p_auth:
+                        datosPush.keys.auth,
+
+                    p_user_agent:
+                        navigator.userAgent
+                }
+            );
+
+        if (error) {
+
+            console.error(
+                "❌ ERROR REGISTRANDO PUSH:",
+                error
+            );
+
+            return;
+        }
+
+        console.log(
+            "✅ PUSH REGISTRADO AUTOMÁTICAMENTE:",
+            data
+        );
+
+        console.log(
+            "🎉 REGISTRO PUSH COMPLETADO"
+        );
+
+    } catch (error) {
+
+        console.error(
+            "💥 ERROR GENERAL REGISTRANDO PUSH:",
+            error
+        );
+    }
+}
 async function iniciarSesion() {
 
     
@@ -191,7 +390,7 @@ async function iniciarSesion() {
         mostrarAplicacion();
 
         cargarDatosAlumno();
-
+registrarPushAlumnoAutomatico();
 
     } catch (error) {
 
@@ -206,7 +405,201 @@ async function iniciarSesion() {
         }
 
     }
+window.CFT_VAPID_PUBLIC_KEY =
+    "BCaYCM5AkphifyEJwnJB4ZlEZ9qordOpLHZu-Wa93a_Hc499DzBKa1wvyawKRtmavySRt_UuW8mQicnsRhxM6hA";
 
+
+async function registrarPushAlumnoAutomatico() {
+
+    console.log(
+        "🔔 INICIANDO REGISTRO AUTOMÁTICO PUSH..."
+    );
+
+    try {
+
+        if (
+            !alumnoActual ||
+            !alumnoActual.id
+        ) {
+            console.error(
+                "❌ No existe alumnoActual.id"
+            );
+            return;
+        }
+
+        if (
+            !codigoAlumno ||
+            !String(codigoAlumno).trim()
+        ) {
+            console.error(
+                "❌ No existe codigoAlumno"
+            );
+            return;
+        }
+
+        if (
+            Notification.permission !==
+            "granted"
+        ) {
+            console.warn(
+                "⚠️ Permiso de notificaciones no concedido:",
+                Notification.permission
+            );
+            return;
+        }
+
+        const registro =
+            await navigator.serviceWorker
+                .getRegistration("/");
+
+        if (!registro) {
+            console.error(
+                "❌ No existe Service Worker"
+            );
+            return;
+        }
+
+        console.log(
+            "⚙️ SERVICE WORKER OK"
+        );
+
+        let suscripcion =
+            await registro.pushManager
+                .getSubscription();
+
+        if (!suscripcion) {
+
+            console.log(
+                "📭 No existe suscripción. Creando..."
+            );
+
+            const urlBase64ToUint8Array =
+                base64String => {
+
+                    const padding =
+                        "=".repeat(
+                            (
+                                4 -
+                                (
+                                    base64String.length %
+                                    4
+                                )
+                            ) % 4
+                        );
+
+                    const base64 =
+                        (
+                            base64String +
+                            padding
+                        )
+                            .replace(
+                                /-/g,
+                                "+"
+                            )
+                            .replace(
+                                /_/g,
+                                "/"
+                            );
+
+                    const rawData =
+                        atob(base64);
+
+                    return Uint8Array.from(
+                        [...rawData].map(
+                            char =>
+                                char.charCodeAt(
+                                    0
+                                )
+                        )
+                    );
+                };
+
+            suscripcion =
+                await registro.pushManager
+                    .subscribe({
+                        userVisibleOnly:
+                            true,
+
+                        applicationServerKey:
+                            urlBase64ToUint8Array(
+                                window.CFT_VAPID_PUBLIC_KEY
+                            )
+                    });
+
+            console.log(
+                "✅ NUEVA SUSCRIPCIÓN CREADA"
+            );
+        }
+
+        const datosPush =
+            suscripcion.toJSON();
+
+        if (
+            !datosPush?.endpoint ||
+            !datosPush?.keys?.p256dh ||
+            !datosPush?.keys?.auth
+        ) {
+            console.error(
+                "❌ SUSCRIPCIÓN PUSH INCOMPLETA"
+            );
+            return;
+        }
+
+        console.log(
+            "📨 SUSCRIPCIÓN PUSH DISPONIBLE"
+        );
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient.rpc(
+                "cft_alumno_registrar_push",
+                {
+                    p_codigo:
+                        codigoAlumno,
+
+                    p_endpoint:
+                        datosPush.endpoint,
+
+                    p_p256dh:
+                        datosPush.keys.p256dh,
+
+                    p_auth:
+                        datosPush.keys.auth,
+
+                    p_user_agent:
+                        navigator.userAgent
+                }
+            );
+
+        if (error) {
+
+            console.error(
+                "❌ ERROR REGISTRANDO PUSH:",
+                error
+            );
+
+            return;
+        }
+
+        console.log(
+            "✅ PUSH REGISTRADO AUTOMÁTICAMENTE:",
+            data
+        );
+
+        console.log(
+            "🎉 REGISTRO PUSH COMPLETADO"
+        );
+
+    } catch (error) {
+
+        console.error(
+            "💥 ERROR GENERAL PUSH:",
+            error
+        );
+    }
+}
 }async function iniciarSesion() {
 
     const codigoInput =
@@ -454,6 +847,7 @@ async function iniciarSesion() {
         mostrarAplicacion();
 
         cargarDatosAlumno();
+registrarPushAlumnoAutomatico();
 
     } catch (error) {
 
@@ -632,6 +1026,7 @@ async function guardarNuevaPassword() {
             mostrarAplicacion();
 
             cargarDatosAlumno();
+registrarPushAlumnoAutomatico(); 
 
         }, 800);
 
@@ -691,6 +1086,7 @@ async function cargarAlumnoPorCodigo() {
 
         cargarDatosAlumno();
 
+registrarPushAlumnoAutomatico(); 
 
     } catch (error) {
 
@@ -1479,18 +1875,6 @@ pantalla.innerHTML = `
     </div>
 `;
 
-/* CERRAR */
-
-document
-    .getElementById("cftCerrarNotificaciones")
-    ?.addEventListener(
-        "click",
-        () => {
-            pantalla.style.display = "none";
-        }
-    );
-
-
 /* ABRIR DETALLE */
 
 pantalla
@@ -1952,54 +2336,31 @@ pantalla
 
                         return;
                     }
+fila.remove();
+const lista =
+    document.getElementById(
+        "cftListaNotificaciones"
+    );
 
+const contador =
+    [...pantalla.children].find(el =>
+        /^\s*\d+\s+notificaci[oó]n(es)?\s*$/i.test(
+            el.textContent.trim()
+        )
+    );
 
-                    setTimeout(
-    async () => {
+if (lista && contador) {
 
-        await cargarNotificacionesInicio();
+    const cantidad =
+        lista.querySelectorAll(
+            "button.cft-fila-notificacion"
+        ).length;
 
-        const nuevaPantalla =
-            document.getElementById(
-                "cftPantallaNotificaciones"
-            );
-
-        if (
-            nuevaPantalla
-        ) {
-
-            nuevaPantalla.style.display =
-                "block";
-        }
-
-    },
-    250
-);
-
-
-                    setTimeout(
-                        async () => {
-
-                            await cargarNotificacionesInicio();
-
-                            const nuevaPantalla =
-                                document.getElementById(
-                                    "cftPantallaNotificaciones"
-                                );
-
-                            if (
-                                nuevaPantalla
-                            ) {
-
-                                nuevaPantalla.style.display =
-                                    "block";
-                            }
-
-                        },
-                        250
-                    );
-
-
+    contador.textContent =
+        cantidad === 1
+            ? "1 notificación"
+            : `${cantidad} notificaciones`;
+}
                 } else {
 
                     fila.style.transform =
@@ -4036,4 +4397,57 @@ function abrirRenovacionPromocional() {
         );
 
     }, 100);
+}
+/* CERRAR NOTIFICACIONES — LISTENER ÚNICO */
+
+if (!window.cftCerrarXRegistrado) {
+
+    window.cftCerrarXRegistrado = true;
+
+    document.addEventListener(
+        "click",
+        async function cerrarXNotificaciones(e) {
+
+            if (
+                e.target?.id !==
+                "cftCerrarNotificaciones"
+            ) {
+                return;
+            }
+
+            console.log(
+                "❌ X DETECTADA — LISTENER ÚNICO"
+            );
+
+            const pantalla =
+                document.getElementById(
+                    "cftPantallaNotificaciones"
+                );
+
+            const inicio =
+                document.getElementById(
+                    "pantallaInicio"
+                );
+
+            if (pantalla) {
+                pantalla.style.display =
+                    "none";
+            }
+
+            if (inicio) {
+                inicio.style.display =
+                    "block";
+            }
+
+            await cargarNotificacionesInicio();
+
+            console.log(
+                "✅ INICIO ACTUALIZADO"
+            );
+        }
+    );
+
+    console.log(
+        "✅ LISTENER ÚNICO REGISTRADO"
+    );
 }
