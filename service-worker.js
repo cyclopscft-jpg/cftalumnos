@@ -34,7 +34,9 @@ self.addEventListener("push", event => {
                 body: datos.mensaje,
                 icon: "/icon-192.png",
                 badge: "/icon-192.png",
-                tag: "cft-alumno"
+               tag: "cft-alumno-" + Date.now(),
+renotify: true,
+silent: false
             }
         )
     );
