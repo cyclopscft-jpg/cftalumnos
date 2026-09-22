@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log("🔗 Supabase conectado");
 
     const sesionGuardada =
-        sessionStorage.getItem("cftAlumnoCodigo");
+        localStorage.getItem("cftAlumnoCodigo");
 
     if (sesionGuardada) {
 
@@ -793,7 +793,7 @@ async function registrarPushAlumnoAutomatico() {
         codigoAlumno = codigo;
         passwordActualTemporal = password;
 
-        sessionStorage.setItem(
+       localStorage.setItem(
             "cftAlumnoCodigo",
             codigo
         );
@@ -848,7 +848,7 @@ async function registrarPushAlumnoAutomatico() {
 
         cargarDatosAlumno();
 registrarPushAlumnoAutomatico();
-
+iniciarRealtimeNotificacionesCFT();
     } catch (error) {
 
         console.error(
@@ -1027,7 +1027,7 @@ async function guardarNuevaPassword() {
 
             cargarDatosAlumno();
 registrarPushAlumnoAutomatico(); 
-
+iniciarRealtimeNotificacionesCFT();
         }, 800);
 
 
@@ -1057,20 +1057,15 @@ async function cargarAlumnoPorCodigo() {
 
         const { data, error } =
             await supabaseClient.rpc(
-                "cft_alumno_login",
+                "cft_alumno_recuperar_sesion",
                 {
-                    p_codigo: codigoAlumno,
-                    p_password: null
+                    p_codigo: codigoAlumno
                 }
             );
 
-
-        // Si la sesión guardada no puede recuperarse,
-        // volvemos al login.
-
         if (error || !data || data.length === 0) {
 
-            sessionStorage.removeItem(
+            localStorage.removeItem(
                 "cftAlumnoCodigo"
             );
 
@@ -1079,19 +1074,25 @@ async function cargarAlumnoPorCodigo() {
             return;
         }
 
-
         alumnoActual = data[0];
+
+        console.log(
+            "✅ SESIÓN RECUPERADA:",
+            alumnoActual
+        );
 
         mostrarAplicacion();
 
         cargarDatosAlumno();
 
-registrarPushAlumnoAutomatico(); 
+        registrarPushAlumnoAutomatico();
+
+        iniciarRealtimeNotificacionesCFT();
 
     } catch (error) {
 
         console.error(
-            "Error recuperando alumno:",
+            "❌ Error recuperando alumno:",
             error
         );
 
@@ -1100,8 +1101,6 @@ registrarPushAlumnoAutomatico();
     }
 
 }
-
-
 // =====================================================
 // MOSTRAR LOGIN
 // =====================================================
@@ -2479,6 +2478,86 @@ if (lista && contador) {
             error
         );
     }
+}
+let canalRealtimeNotificacionesCFT = null;
+
+function iniciarRealtimeNotificacionesCFT() {
+
+    if (canalRealtimeNotificacionesCFT) {
+        console.log("📡 REALTIME NOTIFICACIONES YA ESTÁ ACTIVO");
+        return;
+    }
+
+    console.log("📡 INICIANDO REALTIME DE NOTIFICACIONES CFT");
+
+    canalRealtimeNotificacionesCFT =
+        supabaseClient
+            .channel("cft-notificaciones-alumno")
+
+            .on(
+                "postgres_changes",
+                {
+                    event: "INSERT",
+                    schema: "public",
+                    table: "CFT_Notificaciones"
+                },
+                payload => {
+
+                    console.log(
+                        "🔔 NUEVA NOTIFICACIÓN REALTIME:",
+                        payload.new
+                    );
+
+                    const nueva =
+                        payload.new;
+
+                    const alumnoId =
+                        Number(alumnoActual?.id);
+
+                    if (!alumnoId) {
+                        console.log(
+                            "⚠️ No hay alumnoActual para procesar la notificación"
+                        );
+                        return;
+                    }
+
+                    const destinatario =
+                        nueva.destinatario_tipo;
+
+                    const corresponde =
+                        destinatario === "todos" ||
+                        destinatario === "activos" ||
+                        (
+                            destinatario === "alumno" &&
+                            Number(nueva.alumno_id) === alumnoId
+                        ) ||
+                        destinatario === "por_vencer";
+
+                    if (!corresponde) {
+
+                        console.log(
+                            "ℹ️ La notificación no corresponde a este alumno"
+                        );
+
+                        return;
+                    }
+
+                    console.log(
+                        "🔄 ACTUALIZANDO NOTIFICACIONES AUTOMÁTICAMENTE"
+                    );
+
+                    cargarNotificacionesInicio();
+                }
+            )
+
+            .subscribe(status => {
+
+                console.log(
+                    "📡 REALTIME NOTIFICACIONES:",
+                    status
+                );
+
+            });
 }
 async function cargarLutaLivreInicio() {
     console.log("🥋 CARGANDO LUTA LIVRE EN INICIO");
